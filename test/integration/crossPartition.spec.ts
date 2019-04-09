@@ -18,7 +18,7 @@ function compare(key: string) {
   };
 }
 
-describe("Cross Partition", function() {
+describe.only("Cross Partition", function() {
   this.timeout(process.env.MOCHA_TIMEOUT || "30000");
   const generateDocuments = function(docSize: number) {
     const docs = [];
@@ -128,7 +128,8 @@ describe("Cross Partition", function() {
       try {
         const expectedLength = (expectedOrderIds && expectedOrderIds.length) || documentDefinitions.length;
         while (totalFetchedResults.length <= expectedLength) {
-          const { resources: results } = await queryIterator.fetchNext();
+          const { resources: results, requestCharge } = await queryIterator.fetchNext();
+          assert(requestCharge > 0), "Request charge should be a positive number";
           listOfResultPages.push(results);
 
           if (results === undefined || totalFetchedResults.length === expectedLength) {
@@ -312,7 +313,7 @@ describe("Cross Partition", function() {
       });
     });
 
-    it("Validate Parallel Query As String With maxDegreeOfParallelism: 3", async function() {
+    it.only("Validate Parallel Query As String With maxDegreeOfParallelism: 3", async function() {
       // simple order by query in string format
       const query = "SELECT * FROM root r";
       const options = {
