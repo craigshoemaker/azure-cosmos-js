@@ -10,7 +10,7 @@ import { bulkInsertItems, getTestContainer, removeAllDatabases } from "../common
 
 // process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-describe("NodeJS Aggregate Query Tests", async function() {
+describe.only("NodeJS Aggregate Query Tests", async function() {
   this.timeout(process.env.MOCHA_TIMEOUT || 20000);
   const partitionKey = "key";
   const uniquePartitionKey = "uniquePartitionKey";
@@ -91,7 +91,8 @@ describe("NodeJS Aggregate Query Tests", async function() {
 
       try {
         while (totalFetchedResults.length <= expectedResults.length) {
-          const { resources: results } = await queryIterator.fetchNext();
+          const { resources: results, requestCharge } = await queryIterator.fetchNext();
+          assert(requestCharge > 0);
           listOfResultPages.push(results);
 
           if (results === undefined || totalFetchedResults.length === expectedResults.length) {

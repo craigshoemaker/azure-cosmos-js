@@ -18,7 +18,7 @@ function compare(key: string) {
   };
 }
 
-describe.only("Cross Partition", function() {
+describe("Cross Partition", function() {
   this.timeout(process.env.MOCHA_TIMEOUT || "30000");
   const generateDocuments = function(docSize: number) {
     const docs = [];
@@ -313,7 +313,7 @@ describe.only("Cross Partition", function() {
       });
     });
 
-    it.only("Validate Parallel Query As String With maxDegreeOfParallelism: 3", async function() {
+    it("Validate Parallel Query As String With maxDegreeOfParallelism: 3", async function() {
       // simple order by query in string format
       const query = "SELECT * FROM root r";
       const options = {
